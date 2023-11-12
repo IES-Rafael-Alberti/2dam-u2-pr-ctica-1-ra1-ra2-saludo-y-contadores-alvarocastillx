@@ -21,8 +21,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.capitalize
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,7 +29,7 @@ import androidx.compose.ui.window.Dialog
 
 /**
  * @author: Álvaro Castilla Loaiza
- *
+ * Función que pinta la pantalla principal y controla cuando se muestra el dialog
  */
 @Composable
 fun Practica1() {
@@ -42,12 +40,13 @@ fun Practica1() {
     var myVal by rememberSaveable { mutableStateOf("") }
 
 
-
+    //Columna que esta compuesta por todos los elementos
     Column(
         modifier = Modifier.background(color = Color(0xFFf9f4ef)),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        //Botón saludar
         Button(
             onClick = { show = true },
             modifier = Modifier
@@ -60,9 +59,9 @@ fun Practica1() {
             color = Color(0xFF020826),
             fontSize = 20.sp,
             fontStyle = FontStyle.Italic)
+        //Si show = true se muestra el dialog
         if (show) {
-            MyDialog(show = show,
-                onDismiss = { show = false },
+            MyDialog(
                 contAceptar = contAceptar,
                 contCancelar = contCancelar,
                 onClickAceptar = {
@@ -81,7 +80,7 @@ fun Practica1() {
                 onValueChange = {
                     myVal = it
                 },
-                changeNameText = {
+                cambiarNameText = {
                     nametext = myVal.capitalize()
                 })
         }
@@ -89,9 +88,18 @@ fun Practica1() {
 }
 
 @Composable
+        /**
+         * Función de Dialog
+         * @param: contAceptar -> contador que guarda las veces que se ha pulsado aceptar
+         * @param: contCancelar -> contador que guarda las veces que se ha pulsado cancelar
+         * @param: onClickAceptar -> gestiona botón y contador de aceptar
+         * @param: onClickCancelar -> gestiona botón y contador de cancelar
+         * @param: myVal -> variable del outlinedtextfield
+         * @param: onClickLimpiar -> función para limpiar outlinedtextfield
+         * @param: onValueChange -> gestiona cuando se cambia el valor del outlinedtextfield
+         * @param: cambiarNameText -> cambia nametext por el nombre introducido en Outlinedtextfield
+         */
 fun MyDialog(
-    show: Boolean,
-    onDismiss: () -> Unit,
     contAceptar: Int,
     contCancelar: Int,
     onClickAceptar : () -> Unit,
@@ -99,12 +107,12 @@ fun MyDialog(
     myVal : String,
     onClickLimpiar : () -> Unit,
     onValueChange: (String) -> Unit,
-    changeNameText : () -> Unit
+    cambiarNameText : () -> Unit
 
 ) {
 
-
-    Dialog(onDismissRequest = { show }) {
+//dialog
+    Dialog(onDismissRequest = {  }) {
         Column(
             modifier = Modifier
                 .background(Color(0xFF716040))
@@ -115,7 +123,8 @@ fun MyDialog(
         )
         {
             TituloDialog(msjtitulo = "Configuración")
-            ControlOutLined(myVal, onValueChange = onValueChange,changeNameText)
+            ControlOutLined(myVal, onValueChange = onValueChange,cambiarNameText)
+            //row con 2 botones
             Row {
                 Button(
                     onClick = {
@@ -136,6 +145,7 @@ fun MyDialog(
                         color = Color.Black)
                 }
             }
+            //row con 1 boton
             Row {
                 Button(
                     onClick = {
@@ -153,6 +163,10 @@ fun MyDialog(
 
 
 }
+/**
+ * función para mostrar título del dialog
+ * @param msjtitulo: string del título
+ */
 
 @Composable
 fun TituloDialog(msjtitulo: String) {
@@ -164,6 +178,12 @@ fun TituloDialog(msjtitulo: String) {
     )
 }
 
+/**
+ * función para mostrar el outlinedtextfield
+ * @param: myVal -> variable del outlinedtextfield
+ * @param: onValueChange -> gestiona cuando se cambia el valor del outlinedtextfield
+ * @param: cambiarNameText -> cambia nametext por el nombre introducido en Outlinedtextfield
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ControlOutLined(
